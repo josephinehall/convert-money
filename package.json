@@ -1,0 +1,23 @@
+{
+  "name": "convert-money",
+  "version": "0.0.0",
+  "description": "A small library to handle summing and converting decimal dollars and cents, or imperial pounds, shillings and pence (or a combination thereof) into another format ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/josephinehall/convert-money.git"
+  },
+  "keywords": [
+    "decimal",
+    "imperial",
+    "currency"
+  ],
+  "author": "Josephine Hall <josephinehall@gmail.com> (https://github.com/josephinehall)",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/josephinehall/convert-money/issues"
+  }
+}
