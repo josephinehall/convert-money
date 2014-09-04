@@ -37,19 +37,21 @@ module.exports = {
   },
 
   sumImperial: function(imperialValues) {
-    var pence = sumPence(imperialValues);
-    var shillings = sumShillings(imperialValues);
-    var pounds = sumPounds(imperialValues);
+    int pence = convertToPence(imperialValues);
 
-    //sum up all the imperial values from the param
+    int pounds = pence / 240;
+    pence = pence % 240;
 
-    // int pounds = pence / 240;
-    // pence = pence % 240;
+    int shillings = pence / 12;
+    pence = pence % 12;
 
-    // int shillings = pence / 12;
-    // pence = pence % 12;
+    var total = {
+      pounds: pounds,
+      shillings: shillings,
+      pence: pence
+    };
 
-    return new int[]{ pounds, shillings, pence };
+    return = total;
   },
 
   //convert the imperial amount to decimal equivalent
@@ -62,6 +64,19 @@ module.exports = {
   convertToImperial: function(decimal) {
     var sum = 0;
     return sum;
+  },
+
+  convertToPence: function(values) {
+    var pence = 0;
+    //go through the array,
+    //pick out all the pounds. Multiply by 240
+    //pick out all the shillings. Multiply by 12
+    //add all the leftover pence to this number
+    //should then have the total in pence.
+    for (var i = 0; i < values.length; i++){
+
+    }
+    return pence;
   }
 
 };
