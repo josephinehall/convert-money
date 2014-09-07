@@ -70,15 +70,15 @@ module.exports = {
   },
 
   //TODO convert the imperial amount to decimal equivalent
-  convertToDecimal: function(imperial) {
-    var imperial = 0;
-    return imperial;
+  convertToDecimal: function(amount) {
+    var result = 0;
+    return result;
   },
 
   //TODO convert the decimal sum to the imperial equivalent
-  convertToImperial: function(decimal) {
-    var sum = 0;
-    return sum;
+  convertToImperial: function(amount) {
+    var result = 0;
+    return result;
   },
 
   convertToPence: function(values) {
