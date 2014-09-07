@@ -9,7 +9,6 @@ module.exports = {
   sumToDecimal: function(decimalValues, imperialValues) {
     var decimalSum = sumDecimal(decimalValues);
     var imperialSum = sumImperial(imperialValues);
-
     return decimalSum + convertToDecimal(imperialSum);
   },
 
@@ -21,13 +20,22 @@ module.exports = {
    * @return {int}
    */
   sumToImperial: function(decimalValues, imperialValues) {
-    var sum = 0;
+    //sum the decimal values
     var decimalSum = sumDecimal(decimalValues);
-    var imperialSum = sumImperial(imperialValues);
-    imperialSum = sumImperial(imperialSum, convertToImperial(decimalSum));
-    return imperialSum;
+    //convert the decimal sum to an imperial value
+    var decimalAsImperial = convertToImperial(decimalSum);
+    //push it on to the array of imperial values
+    imperialValues.push(decimalAsImperial);
+    //sum up all the imperial values and return.
+    return sumImperial(imperialValues);
   },
 
+  /**
+    Sum an array of decimal values and return as a decimal value
+
+    @param {Array} decimalValues
+    @return {int}
+  **/
   sumDecimal: function(decimalValues) {
     var sum = 0;
     for (var i = 0; i < decimalValues.length; i++) {
@@ -36,31 +44,38 @@ module.exports = {
     return sum;
   },
 
-  sumImperial: function(imperialValues) {
-    int pence = convertToPence(imperialValues);
+  /**
+    Sum an array of imperial values and return as an imperial value
 
+    @param {Array} imperialValues
+    @return {object} sum
+  **/
+  sumImperial: function(imperialValues) {
+    //calculate the total value of the imperialValues in pence
+    int pence = convertToPence(imperialValues);
+    //then convert to that amount to pounds shillings and pence
     int pounds = pence / 240;
     pence = pence % 240;
 
     int shillings = pence / 12;
     pence = pence % 12;
 
-    var total = {
+    var sum = {
       pounds: pounds,
       shillings: shillings,
       pence: pence
     };
 
-    return = total;
+    return sum;
   },
 
-  //convert the imperial amount to decimal equivalent
+  //TODO convert the imperial amount to decimal equivalent
   convertToDecimal: function(imperial) {
     var imperial = 0;
     return imperial;
   },
 
-  //convert the decimal sum to the imperial equivalent
+  //TODO convert the decimal sum to the imperial equivalent
   convertToImperial: function(decimal) {
     var sum = 0;
     return sum;
