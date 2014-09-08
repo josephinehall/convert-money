@@ -91,7 +91,6 @@ module.exports = {
       result += pence;
       result += this.convertPenceToCents(remainder);
     } else {
-      console.log(pence);
       result += this.convertPenceToCents(pence);
     }
     return result;
