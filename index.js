@@ -67,7 +67,6 @@ module.exports = {
     return result;
   },
 
-  //TODO convert an imperial amount to decimal equivalent
   convertToDecimal: function(values) {
     var pounds = 0,
         shillings = 0,
@@ -82,13 +81,12 @@ module.exports = {
       pence += this.findPenceValue(values[i]);
     }
 
-    result = pounds * 2;
-    result += (shillings * 0.1);
+    result = pounds * 200;
+    result += (shillings * 10);
 
     if (pence >= 10){
       remainder = pence % 10;
-      pence = (pence - remainder) * 0.01;
-      result += pence;
+      result += (pence - remainder) * 10;
       result += this.convertPenceToCents(remainder);
     } else {
       result += this.convertPenceToCents(pence);
@@ -154,25 +152,25 @@ module.exports = {
   convertPenceToCents: function(value) {
     switch (value){
       case 1:
-        return 0.01;
+        return 1;
       case 2:
       case 3:
-        return 0.02;
+        return 2;
       case 4:
-        return 0.03;
+        return 3;
       case 5:
-        return 0.04;
+        return 4;
       case 6:
-        return 0.05;
+        return 5;
       case 7:
-        return 0.06;
+        return 6;
       case 8:
-        return 0.07;
+        return 7;
       case 9:
       case 10:
-        return 0.08;
+        return 8;
       case 11:
-        return 0.09;
+        return 9;
       default:
         return 0;
     }
