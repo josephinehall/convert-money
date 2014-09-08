@@ -52,30 +52,52 @@ module.exports = {
   **/
   sumImperial: function(imperialValues) {
     //calculate the total value of the imperialValues in pence
-    int pence = convertToPence(imperialValues);
+    var pence = convertToPence(imperialValues);
     //then convert to that amount to pounds shillings and pence
-    int pounds = pence / 240;
+    var pounds = pence / 240;
     pence = pence % 240;
 
-    int shillings = pence / 12;
+    var shillings = pence / 12;
     pence = pence % 12;
 
-    var sum = {
-      pounds: pounds,
-      shillings: shillings,
-      pence: pence
-    };
-
-    return sum;
-  },
-
-  //TODO convert the imperial amount to decimal equivalent
-  convertToDecimal: function(amount) {
-    var result = 0;
+    var result = [];
+    result.push(pounds + 'pounds');
+    result.push(shillings + 'shillings');
+    result.push(pence + 'pence');
     return result;
   },
 
-  //TODO convert the decimal sum to the imperial equivalent
+  //TODO convert an imperial amount to decimal equivalent
+  convertToDecimal: function(values) {
+    var pounds = 0,
+        shillings = 0,
+        pence = 0,
+        result = 0,
+        cents = 0,
+        remainder = 0;
+
+    for (var i = 0; i < values.length; i++){
+      pounds += this.findPoundValue(values[i]);
+      shillings += this.findShillingsValue(values[i]);
+      pence += this.findPenceValue(values[i]);
+    }
+
+    result = pounds * 2;
+    result += (shillings * 0.1);
+
+    if (pence >= 10){
+      remainder = pence % 10;
+      pence = (pence - remainder) * 0.01;
+      result += pence;
+      result += this.convertPenceToCents(remainder);
+    } else {
+      console.log(pence);
+      result += this.convertPenceToCents(pence);
+    }
+    return result;
+  },
+
+  //TODO convert a decimal amount to the imperial equivalent
   convertToImperial: function(amount) {
     var result = 0;
     return result;
@@ -86,7 +108,7 @@ module.exports = {
       - sum all the pounds together and multiply by 240
       - sum all the shillings together and multiply by 12
       - sum all the pence
-      - add each of these together and return the sum,=.
+      - add each of these together and return it.
 
     @param {Array} values
     @return {object} sum
@@ -97,34 +119,64 @@ module.exports = {
         pounds = 0,
         shillings = 0;
     for (var i = 0; i < values.length; i++){
-      pounds += findPoundValue(values[i]);
-      shillings += findShillingsValue(values[i]);
-      pence += findPenceValue(values[i]);
+      pounds += this.findPoundValue(values[i]);
+      shillings += this.findShillingsValue(values[i]);
+      pence += this.findPenceValue(values[i]);
     }
     pounds = pounds * 240;
     shillings = shillings * 12;
     return pounds + shillings + pence;
   },
 
-  findPoundValue: function(string){
-    if ((/\u00a3|pound|pounds/).test(string)){
-      return string.split(/\u00a3|pound|pounds/)[0];
+  findPoundValue: function(string) {
+    if ((/\u00a3|pound|pounds/).test(string)) {
+      var value = string.split(/\u00a3|pound|pounds/)[0];
+      return parseInt(value);
     }
     return 0;
   },
 
-  findShillingsValue: function(string){
-    if ((/d|d.|shilling|shillings/).test(string)){
-      return string.split(/d|d.|shilling|shillings/)[0];
+  findShillingsValue: function(string) {
+    if ((/shilling|shillings/).test(string)){
+      var value = string.split(/shilling|shillings/)[0];
+      return parseInt(value);
     }
     return 0;
   },
 
-  findPenceValue: function(string){
-    if ((/s|s.|penny|pence|pennies/).test(string)){
-      return string.split(/s|s.|penny|pence|pennies/)[0];
+  findPenceValue: function(string) {
+    if ((/penny|pence|pennies/).test(string)){
+      var value = string.split(/penny|pence|pennies/)[0];
+      return parseInt(value);
     }
     return 0;
+  },
+
+  convertPenceToCents: function(value) {
+    switch (value){
+      case 1:
+        return 0.01;
+      case 2:
+      case 3:
+        return 0.02;
+      case 4:
+        return 0.03;
+      case 5:
+        return 0.04;
+      case 6:
+        return 0.05;
+      case 7:
+        return 0.06;
+      case 8:
+        return 0.07;
+      case 9:
+      case 10:
+        return 0.08;
+      case 11:
+        return 0.09;
+      default:
+        return 0;
+    }
   }
 
 };
