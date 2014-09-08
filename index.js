@@ -81,17 +81,50 @@ module.exports = {
     return result;
   },
 
-  convertToPence: function(values) {
-    var pence = 0;
-    //go through the array,
-    //pick out all the pounds. Multiply by 240
-    //pick out all the shillings. Multiply by 12
-    //add all the leftover pence to this number
-    //should then have the total in pence.
-    for (var i = 0; i < values.length; i++){
+  /**
+    Convert an array of imperial values into the sum total in pence
+      - sum all the pounds together and multiply by 240
+      - sum all the shillings together and multiply by 12
+      - sum all the pence
+      - add each of these together and return the sum,=.
 
+    @param {Array} values
+    @return {object} sum
+  **/
+  convertToPence: function(values) {
+    var sum = 0,
+        pence = 0,
+        pounds = 0,
+        shillings = 0;
+    for (var i = 0; i < values.length; i++){
+      pounds += findPoundValue(values[i]);
+      shillings += findShillingsValue(values[i]);
+      pence += findPenceValue(values[i]);
     }
-    return pence;
+    pounds = pounds * 240;
+    shillings = shillings * 12;
+    return pounds + shillings + pence;
+  },
+
+  findPoundValue: function(string){
+    if ((/\u00a3|pound|pounds/).test(string)){
+      return string.split(/\u00a3|pound|pounds/)[0];
+    }
+    return 0;
+  },
+
+  findShillingsValue: function(string){
+    if ((/d|d.|shilling|shillings/).test(string)){
+      return string.split(/d|d.|shilling|shillings/)[0];
+    }
+    return 0;
+  },
+
+  findPenceValue: function(string){
+    if ((/s|s.|penny|pence|pennies/).test(string)){
+      return string.split(/s|s.|penny|pence|pennies/)[0];
+    }
+    return 0;
   }
 
 };
