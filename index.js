@@ -7,9 +7,9 @@ module.exports = {
    * @return {int}
    */
   sumToDecimal: function(decimalValues, imperialValues) {
-    var decimalSum = sumDecimal(decimalValues);
-    var imperialSum = sumImperial(imperialValues);
-    return decimalSum + convertToDecimal(imperialSum);
+    var decimalSum = this.sumDecimal(decimalValues);
+    var imperialSum = this.sumImperial(imperialValues);
+    return decimalSum + this.convertToDecimal(imperialSum);
   },
 
   /**
@@ -21,13 +21,13 @@ module.exports = {
    */
   sumToImperial: function(decimalValues, imperialValues) {
     //sum the decimal values
-    var decimalSum = sumDecimal(decimalValues);
+    var decimalSum = this.sumDecimal(decimalValues);
     //convert the decimal sum to an imperial value
-    var decimalAsImperial = convertToImperial(decimalSum);
+    var decimalAsImperial = this.convertToImperial(decimalSum);
     //push it on to the array of imperial values
     imperialValues.push(decimalAsImperial);
     //sum up all the imperial values and return.
-    return sumImperial(imperialValues);
+    return this.sumImperial(imperialValues);
   },
 
   /**
@@ -39,7 +39,7 @@ module.exports = {
   sumDecimal: function(decimalValues) {
     var sum = 0;
     for (var i = 0; i < decimalValues.length; i++) {
-      sum = sum + decimalValues[i];
+      sum = sum + parseInt(decimalValues[i]);
     }
     return sum;
   },
@@ -52,12 +52,12 @@ module.exports = {
   **/
   sumImperial: function(imperialValues) {
     //calculate the total value of the imperialValues in pence
-    var pence = convertToPence(imperialValues);
+    var pence = this.convertToPence(imperialValues);
     //then convert to that amount to pounds shillings and pence
-    var pounds = pence / 240;
+    var pounds = Math.floor(pence / 240);
     pence = pence % 240;
 
-    var shillings = pence / 12;
+    var shillings = Math.floor(pence / 12);
     pence = pence % 12;
 
     var result = [];
@@ -67,6 +67,11 @@ module.exports = {
     return result;
   },
 
+  /**
+    Convert an array of imperial values into the sum total in decimal currency - total cents
+    @param {Array} values
+    @return {int} result, in cents
+  **/
   convertToDecimal: function(values) {
     var pounds = 0,
         shillings = 0,
@@ -86,7 +91,7 @@ module.exports = {
 
     if (pence >= 10){
       remainder = pence % 10;
-      result += (pence - remainder) * 10;
+      result += (pence - remainder);
       result += this.convertPenceToCents(remainder);
     } else {
       result += this.convertPenceToCents(pence);
@@ -108,11 +113,10 @@ module.exports = {
       - add each of these together and return it.
 
     @param {Array} values
-    @return {object} sum
+    @return {int} sum
   **/
   convertToPence: function(values) {
-    var sum = 0,
-        pence = 0,
+    var pence = 0,
         pounds = 0,
         shillings = 0;
     for (var i = 0; i < values.length; i++){
