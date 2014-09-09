@@ -99,14 +99,34 @@ module.exports = {
     return result;
   },
 
-  //TODO convert a decimal amount to the imperial equivalent
+  /**
+    Convert a decimal amount in cents into the equivalent imperial amount
+    @param {int} amount
+    @return {Array} result, in imperial
+  **/
   convertToImperial: function(amount) {
-    var result = 0;
+    var pounds,
+        shillings,
+        pence,
+        result = [];
+
+    pounds = Math.floor(amount / 200);
+    amount -= pounds * 200;
+    shillings = Math.floor(amount / 10);
+    amount -= shillings * 10;
+    pence = this.convertCentsToPence(amount);
+
+    if (pounds > 0)
+      result.push(pounds + ' pounds');
+    if (shillings > 0)
+      result.push(shillings + ' shillings');
+    if (pence > 0)
+      result.push(pence + ' pence');
     return result;
   },
 
   /**
-    Convert an array of imperial values into the sum total in pence
+    Convert an array of imperial values into the total in pence
       - sum all the pounds together and multiply by 240
       - sum all the shillings together and multiply by 12
       - sum all the pence
