@@ -1,84 +1,83 @@
 module.exports = {
   /**
    * Sum arrays of decimal values and imperial values, return as a decimal value
-   *
    * @param  {Array} decimalValues
    * @param  {Array} imperialValues
    * @return {int}
    */
   sumToDecimal: function(decimalValues, imperialValues) {
-    var decimalSum = this.sumDecimal(decimalValues);
     var imperialSum = this.sumImperial(imperialValues);
-    return decimalSum + this.convertToDecimal(imperialSum);
+    return this.convertToDecimal(imperialSum) + this.sumDecimal(decimalValues);
   },
 
   /**
    * Sum arrays of decimal values and imperial values, return as an imperial value
-   *
    * @param  {Array} decimalValues
    * @param  {Array} imperialValues
-   * @return {int}
+   * @return {Array}
    */
   sumToImperial: function(decimalValues, imperialValues) {
-    //sum the decimal values
     var decimalSum = this.sumDecimal(decimalValues);
-    //convert the decimal sum to an imperial value
-    var decimalAsImperial = this.convertToImperial(decimalSum);
-    //push it on to the array of imperial values
-    imperialValues.push(decimalAsImperial);
-    //sum up all the imperial values and return.
+    var decimalSumAsImperial = this.convertToImperial(decimalSum);
+    //push each of the imperial-converted decimal amounts on to the array of imperial values
+    for (var i = 0; i < decimalSumAsImperial.length; i++) {
+      imperialValues.push(decimalSumAsImperial[i]);
+    }
     return this.sumImperial(imperialValues);
   },
 
   /**
     Sum an array of decimal values and return as a decimal value
-
     @param {Array} decimalValues
-    @return {int}
+    @return {int} sum
   **/
   sumDecimal: function(decimalValues) {
     var sum = 0;
     for (var i = 0; i < decimalValues.length; i++) {
-      sum = sum + parseInt(decimalValues[i]);
+      sum += parseInt(decimalValues[i]);
     }
     return sum;
   },
 
   /**
     Sum an array of imperial values and return as an imperial value
-
     @param {Array} imperialValues
-    @return {object} sum
+    @return {Array} sum
   **/
   sumImperial: function(imperialValues) {
+    var pounds,
+        shillings,
+        pence,
+        sum = [];
     //calculate the total value of the imperialValues in pence
-    var pence = this.convertToPence(imperialValues);
+    pence = this.convertToPence(imperialValues);
     //then convert to that amount to pounds shillings and pence
-    var pounds = Math.floor(pence / 240);
-    pence = pence % 240;
+    pounds = Math.floor(pence / 240);
+    pence %= 240;
 
-    var shillings = Math.floor(pence / 12);
-    pence = pence % 12;
+    shillings = Math.floor(pence / 12);
+    pence %= 12;
 
-    var result = [];
-    result.push(pounds + 'pounds');
-    result.push(shillings + 'shillings');
-    result.push(pence + 'pence');
-    return result;
+    if (pounds > 0)
+      sum.push(pounds + ' pounds');
+    if (shillings > 0)
+      sum.push(shillings + ' shillings');
+    if (pence > 0)
+      sum.push(pence + ' pence');
+    return sum;
   },
 
   /**
-    Convert an array of imperial values into the sum total in decimal currency - total cents
+    Convert an array of imperial values into the total in decimal currency - in cents
     @param {Array} values
     @return {int} result, in cents
   **/
   convertToDecimal: function(values) {
-    var pounds = 0,
-        shillings = 0,
-        pence = 0,
-        result = 0,
-        cents = 0,
-        remainder = 0;
+    var pounds,
+        shillings,
+        pence,
+        result,
+        remainder;
 
     for (var i = 0; i < values.length; i++){
       pounds += this.findPoundValue(values[i]);
@@ -87,11 +86,11 @@ module.exports = {
     }
 
     result = pounds * 200;
-    result += (shillings * 10);
+    result += shillings * 10;
 
     if (pence >= 10){
       remainder = pence % 10;
-      result += (pence - remainder);
+      result += pence - remainder;
       result += this.convertPenceToCents(remainder);
     } else {
       result += this.convertPenceToCents(pence);
@@ -144,8 +143,8 @@ module.exports = {
       shillings += this.findShillingsValue(values[i]);
       pence += this.findPenceValue(values[i]);
     }
-    pounds = pounds * 240;
-    shillings = shillings * 12;
+    pounds *= 240;
+    shillings *= 12;
     return pounds + shillings + pence;
   },
 
