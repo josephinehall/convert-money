@@ -20,6 +20,8 @@ module.exports = {
     var decimalSum = this.sumDecimal(decimalValues);
     var decimalSumAsImperial = this.convertToImperial(decimalSum);
     //push each of the imperial-converted decimal amounts on to the array of imperial values
+    if (!imperialValues)
+      imperialValues = [];
     for (var i = 0; i < decimalSumAsImperial.length; i++) {
       imperialValues.push(decimalSumAsImperial[i]);
     }
@@ -76,7 +78,7 @@ module.exports = {
     var pounds,
         shillings,
         pence,
-        result,
+        result = 0,
         remainder;
 
     for (var i = 0; i < values.length; i++){
