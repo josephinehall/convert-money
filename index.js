@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = {
   /**
    * Sum arrays of decimal values and imperial values, return as a decimal value
@@ -6,7 +8,9 @@ module.exports = {
    * @return {int}
    */
   sumToDecimal: function(decimalValues, imperialValues) {
-    var imperialSum = this.sumImperial(imperialValues);
+    var imperialSum = 0;
+    if (imperialValues)
+      imperialSum = this.sumImperial(imperialValues);
     return this.convertToDecimal(imperialSum) + this.sumDecimal(decimalValues);
   },
 
@@ -35,8 +39,10 @@ module.exports = {
   **/
   sumDecimal: function(decimalValues) {
     var sum = 0;
-    for (var i = 0; i < decimalValues.length; i++) {
-      sum += parseInt(decimalValues[i]);
+    if (decimalValues){
+      for (var i = 0; i < decimalValues.length; i++) {
+        sum += parseInt(decimalValues[i]);
+      }
     }
     return sum;
   },
@@ -75,24 +81,26 @@ module.exports = {
     @return {int} result, in cents
   **/
   convertToDecimal: function(values) {
-    var pounds,
-        shillings,
-        pence,
+    var pounds = 0,
+        shillings = 0,
+        pence= 0,
         result = 0,
-        remainder;
+        remainder = 0;
 
-    for (var i = 0; i < values.length; i++){
-      pounds += this.findPoundValue(values[i]);
-      shillings += this.findShillingsValue(values[i]);
-      pence += this.findPenceValue(values[i]);
+    if (values){
+      for (var i = 0; i < values.length; i++){
+        pounds += this.findPoundValue(values[i]);
+        shillings += this.findShillingsValue(values[i]);
+        pence += this.findPenceValue(values[i]);
+      }
     }
 
     result = pounds * 200;
     result += shillings * 10;
 
-    if (pence >= 10){
-      remainder = pence % 10;
-      result += pence - remainder;
+    if (pence >= 12){
+      remainder = pence % 12;
+      result += ((pence - remainder) / 12) * 10;
       result += this.convertPenceToCents(remainder);
     } else {
       result += this.convertPenceToCents(pence);
@@ -140,10 +148,12 @@ module.exports = {
     var pence = 0,
         pounds = 0,
         shillings = 0;
-    for (var i = 0; i < values.length; i++){
-      pounds += this.findPoundValue(values[i]);
-      shillings += this.findShillingsValue(values[i]);
-      pence += this.findPenceValue(values[i]);
+    if (values){
+      for (var i = 0; i < values.length; i++){
+        pounds += this.findPoundValue(values[i]);
+        shillings += this.findShillingsValue(values[i]);
+        pence += this.findPenceValue(values[i]);
+      }
     }
     pounds *= 240;
     shillings *= 12;
